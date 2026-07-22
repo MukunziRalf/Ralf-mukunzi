@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stethoscope, User, Sparkles, ShieldAlert, Smile as ToothIcon, FileText, MessageSquare, Activity, Image as ImageIcon, Home as HomeIcon } from 'lucide-react';
+import { Stethoscope, User, Sparkles, ShieldAlert, Smile as ToothIcon, FileText, MessageSquare, Activity, Image as ImageIcon } from 'lucide-react';
 
 interface HeaderProps {
   userRole: 'patient' | 'clinician';
@@ -14,36 +14,24 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo & Title */}
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('home')}>
+          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('triage')}>
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm">
               <ToothIcon className="w-6 h-6 text-white" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">DentaAI</span>
+                <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">DentaCare AI</span>
                 <span className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 text-[11px] px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800 font-bold flex items-center space-x-1">
                   <Sparkles className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-                  <span>Practice Website</span>
+                  <span>Gemini 3.6</span>
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Precision AI Dental Practice & Triage</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Clinical & Patient Dental Intelligence</p>
             </div>
           </div>
 
           {/* Center Navigation Tabs */}
           <nav className="hidden md:flex items-center space-x-1 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <button
-              onClick={() => setActiveTab('home')}
-              className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
-                activeTab === 'home'
-                  ? 'bg-blue-600 text-white shadow-sm font-bold'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/50'
-              }`}
-            >
-              <HomeIcon className="w-4 h-4" />
-              <span>Website Home</span>
-            </button>
-
             <button
               onClick={() => setActiveTab('triage')}
               className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
@@ -77,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
               }`}
             >
               <MessageSquare className="w-4 h-4" />
-              <span>AI Chat</span>
+              <span>AI Dental Chat</span>
             </button>
 
             <button
@@ -102,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
                 }`}
               >
                 <FileText className="w-4 h-4 text-blue-200" />
-                <span>SOAP</span>
+                <span>SOAP & Treatment</span>
               </button>
             ) : (
               <button
@@ -114,7 +102,7 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
                 }`}
               >
                 <ShieldAlert className="w-4 h-4" />
-                <span>Care</span>
+                <span>Care & Post-Op</span>
               </button>
             )}
           </nav>
@@ -131,7 +119,7 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
                 }`}
               >
                 <User className="w-3.5 h-3.5" />
-                <span>Patient</span>
+                <span>Patient Mode</span>
               </button>
               <button
                 onClick={() => setUserRole('clinician')}
@@ -142,7 +130,7 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
                 }`}
               >
                 <Stethoscope className="w-3.5 h-3.5" />
-                <span>Clinic</span>
+                <span>Clinic Mode</span>
               </button>
             </div>
           </div>
@@ -151,13 +139,6 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
 
       {/* Mobile Nav Bar */}
       <div className="md:hidden flex items-center justify-around bg-white dark:bg-slate-900 px-2 py-2 border-t border-slate-200 dark:border-slate-800 overflow-x-auto text-xs">
-        <button
-          onClick={() => setActiveTab('home')}
-          className={`flex flex-col items-center py-1 px-2 rounded-xl ${activeTab === 'home' ? 'text-blue-600 font-bold' : 'text-slate-500'}`}
-        >
-          <HomeIcon className="w-4 h-4 mb-0.5" />
-          <span>Home</span>
-        </button>
         <button
           onClick={() => setActiveTab('triage')}
           className={`flex flex-col items-center py-1 px-2 rounded-xl ${activeTab === 'triage' ? 'text-blue-600 font-bold' : 'text-slate-500'}`}

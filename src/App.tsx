@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header';
-import { WebsiteHome } from './components/WebsiteHome';
 import { SymptomTriage } from './components/SymptomTriage';
 import { InteractiveToothChart } from './components/InteractiveToothChart';
 import { AIChatAssistant } from './components/AIChatAssistant';
@@ -11,7 +10,7 @@ import { ShieldAlert, Sparkles, Heart } from 'lucide-react';
 
 export default function App() {
   const [userRole, setUserRole] = useState<'patient' | 'clinician'>('patient');
-  const [activeTab, setActiveTab] = useState<string>('home');
+  const [activeTab, setActiveTab] = useState<string>('triage');
   const [selectedToothForTriage, setSelectedToothForTriage] = useState<number | null>(null);
   const [chatInitialPrompt, setChatInitialPrompt] = useState<string | null>(null);
 
@@ -28,7 +27,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
       {/* Top Header & Role Switcher */}
       <Header
         userRole={userRole}
@@ -39,13 +38,6 @@ export default function App() {
 
       {/* Main Content View */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {activeTab === 'home' && (
-          <WebsiteHome
-            onNavigateTab={(tab) => setActiveTab(tab)}
-            userRole={userRole}
-          />
-        )}
-
         {activeTab === 'triage' && (
           <SymptomTriage
             initialToothNum={selectedToothForTriage}
@@ -83,7 +75,7 @@ export default function App() {
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-800 text-[11px] text-slate-500">
             <div className="flex items-center space-x-2">
-              <span className="font-bold text-slate-300">DentaAI Dental Practice & Intelligence Portal</span>
+              <span className="font-bold text-slate-300">DentaCare AI Dental Assistant</span>
               <span>•</span>
               <span className="flex items-center space-x-1 text-cyan-400 font-semibold">
                 <Sparkles className="w-3 h-3" />
