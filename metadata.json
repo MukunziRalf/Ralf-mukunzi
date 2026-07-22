@@ -1,0 +1,6 @@
+{
+  "name": "AI Dental Assistant",
+  "description": "Smart clinical & patient dental assistant with AI symptom triage, tooth selector, SOAP note generator, treatment plan estimator, and oral health guide.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
