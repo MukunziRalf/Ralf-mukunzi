@@ -1,0 +1,27 @@
+# netlify.toml
+# Complete configuration for hosting your React Frontend and Serverless Express API on Netlify
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Functions directory configuration
+[functions]
+  directory = "netlify/functions"
+  node_compat = true
+
+[[redirects]]
+  # This rule routes all client-side API requests starting with /api/
+  # straight to our serverless Express API function, preserving paths
+  # so that Express matches them correctly (e.g. /api/dental/symptom-checker)
+  from = "/api/*"
+  to = "/.netlify/functions/api"
+  status = 200
+  force = true
+
+[[redirects]]
+  # Standard single-page application (SPA) routing fallback rule for Netlify.
+  # This ensures client-side routes (like /triage, /chart, etc.) work when refreshed.
+  from = "/*"
+  to = "/index.html"
+  status = 200
