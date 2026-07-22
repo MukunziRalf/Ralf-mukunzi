@@ -1,14 +1,16 @@
 import React from 'react';
-import { Stethoscope, User, Sparkles, ShieldAlert, Smile as ToothIcon, FileText, MessageSquare, Activity, Image as ImageIcon } from 'lucide-react';
+import { Stethoscope, User, Sparkles, ShieldAlert, Smile as ToothIcon, FileText, MessageSquare, Activity, Image as ImageIcon, Sun, Moon } from 'lucide-react';
 
 interface HeaderProps {
   userRole: 'patient' | 'clinician';
   setUserRole: (role: 'patient' | 'clinician') => void;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab, setActiveTab }) => {
+export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab, setActiveTab, theme, onToggleTheme }) => {
   return (
     <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white sticky top-0 z-40 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,10 +23,6 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
             <div>
               <div className="flex items-center space-x-2">
                 <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">DentaCare AI</span>
-                <span className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 text-[11px] px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800 font-bold flex items-center space-x-1">
-                  <Sparkles className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-                  <span>Gemini 3.6</span>
-                </span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Clinical & Patient Dental Intelligence</p>
             </div>
@@ -107,8 +105,8 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
             )}
           </nav>
 
-          {/* Mode Switcher */}
-          <div className="flex items-center space-x-2">
+          {/* Mode Switcher & Theme Toggle */}
+          <div className="flex items-center space-x-2.5">
             <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center">
               <button
                 onClick={() => setUserRole('patient')}
@@ -119,7 +117,8 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
                 }`}
               >
                 <User className="w-3.5 h-3.5" />
-                <span>Patient Mode</span>
+                <span className="hidden sm:inline">Patient Mode</span>
+                <span className="sm:hidden">Patient</span>
               </button>
               <button
                 onClick={() => setUserRole('clinician')}
@@ -130,9 +129,22 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
                 }`}
               >
                 <Stethoscope className="w-3.5 h-3.5" />
-                <span>Clinic Mode</span>
+                <span className="hidden sm:inline">Clinic Mode</span>
+                <span className="sm:hidden">Clinic</span>
               </button>
             </div>
+
+            <button
+              onClick={onToggleTheme}
+              className="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all focus:outline-none"
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4.5 h-4.5 text-amber-500 fill-amber-400" />
+              ) : (
+                <Moon className="w-4.5 h-4.5 text-slate-700 fill-slate-100" />
+              )}
+            </button>
           </div>
         </div>
       </div>

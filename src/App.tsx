@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { SymptomTriage } from './components/SymptomTriage';
 import { InteractiveToothChart } from './components/InteractiveToothChart';
@@ -13,6 +13,25 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>('triage');
   const [selectedToothForTriage, setSelectedToothForTriage] = useState<number | null>(null);
   const [chatInitialPrompt, setChatInitialPrompt] = useState<string | null>(null);
+
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const stored = localStorage.getItem('theme');
+    if (stored === 'light' || stored === 'dark') return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   const handleSelectToothForTriage = (toothNum: number) => {
     setSelectedToothForTriage(toothNum);
@@ -34,6 +53,8 @@ export default function App() {
         setUserRole={setUserRole}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       {/* Main Content View */}
@@ -76,11 +97,6 @@ export default function App() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-800 text-[11px] text-slate-500">
             <div className="flex items-center space-x-2">
               <span className="font-bold text-slate-300">DentaCare AI Dental Assistant</span>
-              <span>•</span>
-              <span className="flex items-center space-x-1 text-cyan-400 font-semibold">
-                <Sparkles className="w-3 h-3" />
-                <span>Gemini 3.6 Flash Engine</span>
-              </span>
             </div>
 
             <p className="flex items-center space-x-1">
