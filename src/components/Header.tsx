@@ -1,16 +1,14 @@
 import React from 'react';
-import { Stethoscope, User, Sparkles, ShieldAlert, Smile as ToothIcon, FileText, MessageSquare, Activity, Image as ImageIcon, Sun, Moon } from 'lucide-react';
+import { Stethoscope, User, Sparkles, ShieldAlert, Smile as ToothIcon, FileText, MessageSquare, Activity, Image as ImageIcon } from 'lucide-react';
 
 interface HeaderProps {
   userRole: 'patient' | 'clinician';
   setUserRole: (role: 'patient' | 'clinician') => void;
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  theme: 'light' | 'dark';
-  onToggleTheme: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab, setActiveTab, theme, onToggleTheme }) => {
+export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab, setActiveTab }) => {
   return (
     <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white sticky top-0 z-40 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -105,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
             )}
           </nav>
 
-          {/* Mode Switcher & Theme Toggle */}
+          {/* Mode Switcher */}
           <div className="flex items-center space-x-2.5">
             <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center">
               <button
@@ -133,18 +131,6 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
                 <span className="sm:hidden">Clinic</span>
               </button>
             </div>
-
-            <button
-              onClick={onToggleTheme}
-              className="p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all focus:outline-none"
-              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4.5 h-4.5 text-amber-500 fill-amber-400" />
-              ) : (
-                <Moon className="w-4.5 h-4.5 text-slate-700 fill-slate-100" />
-              )}
-            </button>
           </div>
         </div>
       </div>

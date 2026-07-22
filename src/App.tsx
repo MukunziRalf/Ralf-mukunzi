@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { SymptomTriage } from './components/SymptomTriage';
 import { InteractiveToothChart } from './components/InteractiveToothChart';
@@ -13,25 +13,6 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>('triage');
   const [selectedToothForTriage, setSelectedToothForTriage] = useState<number | null>(null);
   const [chatInitialPrompt, setChatInitialPrompt] = useState<string | null>(null);
-
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    const stored = localStorage.getItem('theme');
-    if (stored === 'light' || stored === 'dark') return stored;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
 
   const handleSelectToothForTriage = (toothNum: number) => {
     setSelectedToothForTriage(toothNum);
@@ -53,8 +34,6 @@ export default function App() {
         setUserRole={setUserRole}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        theme={theme}
-        onToggleTheme={toggleTheme}
       />
 
       {/* Main Content View */}

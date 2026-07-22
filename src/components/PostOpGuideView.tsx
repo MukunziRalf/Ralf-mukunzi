@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { POST_OP_GUIDES } from '../data/postOpGuides';
 import { BrushingTimer } from './BrushingTimer';
-import { ShieldAlert, CheckCircle2, AlertTriangle, Clock, Search, BookOpen, Download } from 'lucide-react';
-import { downloadPostOpPDF } from '../utils/pdfGenerator';
+import { ShieldAlert, CheckCircle2, AlertTriangle, Clock, Search, BookOpen } from 'lucide-react';
 
 export const PostOpGuideView: React.FC = () => {
   const [selectedKey, setSelectedKey] = useState<string>('extraction');
@@ -81,13 +80,6 @@ export const PostOpGuideView: React.FC = () => {
               <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider">{activeGuide.category}</span>
               <h2 className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">{activeGuide.title}</h2>
             </div>
-            <button
-              onClick={() => downloadPostOpPDF(activeGuide)}
-              className="p-2 px-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-semibold flex items-center space-x-1.5 shadow-sm transition-all"
-            >
-              <Download className="w-4.5 h-4.5" />
-              <span className="hidden sm:inline">Download PDF Guide</span>
-            </button>
           </div>
 
           {/* DO List */}

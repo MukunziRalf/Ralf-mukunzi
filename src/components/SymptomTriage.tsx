@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { COMMON_SYMPTOMS_LIST, COMMON_TRIGGERS_LIST, TEETH_DATA } from '../data/teethData';
 import { SymptomInput, TriageResult } from '../types';
-import { Activity, AlertTriangle, CheckCircle2, Clock, ShieldAlert, Sparkles, Stethoscope, Smile as ToothIcon, HelpCircle, ArrowRight, RefreshCw, Printer, Download } from 'lucide-react';
-import { downloadTriagePDF } from '../utils/pdfGenerator';
+import { Activity, AlertTriangle, CheckCircle2, Clock, ShieldAlert, Sparkles, Stethoscope, Smile as ToothIcon, HelpCircle, ArrowRight, RefreshCw, Printer } from 'lucide-react';
 
 interface SymptomTriageProps {
   initialToothNum?: number | null;
@@ -305,22 +304,13 @@ export const SymptomTriage: React.FC<SymptomTriageProps> = ({ initialToothNum, o
                   <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">AI Clinical Triage</span>
                   <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">Assessment Results</h2>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => downloadTriagePDF(result, selectedTooth)}
-                    className="p-2 px-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg flex items-center space-x-1.5 text-xs font-semibold shadow-xs transition-all"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>Download PDF</span>
-                  </button>
-                  <button
-                    onClick={() => window.print()}
-                    className="p-2 text-slate-500 hover:text-slate-800 dark:hover:text-white rounded-lg border border-slate-200 dark:border-slate-700 flex items-center space-x-1 text-xs font-medium"
-                  >
-                    <Printer className="w-4 h-4" />
-                    <span className="hidden sm:inline">Print</span>
-                  </button>
-                </div>
+                <button
+                  onClick={() => window.print()}
+                  className="p-2 text-slate-500 hover:text-slate-800 dark:hover:text-white rounded-lg border border-slate-200 dark:border-slate-700 flex items-center space-x-1 text-xs font-medium"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span className="hidden sm:inline">Print Report</span>
+                </button>
               </div>
 
               {/* Urgency Alert */}
