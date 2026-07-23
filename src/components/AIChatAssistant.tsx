@@ -78,7 +78,12 @@ export const AIChatAssistant: React.FC<AIChatAssistantProps> = ({ userRole, init
       });
 
       if (!res.ok) {
-        throw new Error('Failed to get response from AI Dental Assistant.');
+        let serverError = '';
+        try {
+          const errData = await res.json();
+          serverError = errData.error || errData.message || '';
+        } catch (_) {}
+        throw new Error(serverError || 'Failed to get response from AI Dental Assistant.');
       }
 
       const data = await res.json();
@@ -96,7 +101,7 @@ export const AIChatAssistant: React.FC<AIChatAssistantProps> = ({ userRole, init
       const errorMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        text: 'Sorry, I encountered an issue retrieving dental guidance. Please ensure your Gemini API Key is configured in Secrets.',
+        text: `Error: ${err.message || 'Something went wrong.'}. If you are running on Netlify, please verify that you have added your GEMINI_API_KEY to the Netlify Environment Variables (Site configuration > Environment variables).`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, errorMsg]);

@@ -22,13 +22,15 @@ const getAi = () => {
   });
 };
 
+const router = express.Router();
+
 // 1. Health Check
-app.get('/api/health', (req, res) => {
+router.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'AI Dental Assistant API' });
 });
 
 // 2. Symptom Checker & Triage API
-app.post('/api/dental/symptom-checker', async (req, res) => {
+router.post('/dental/symptom-checker', async (req, res) => {
   try {
     const { toothNumber, painLevel, duration, symptoms, triggers, description } = req.body;
 
@@ -113,7 +115,7 @@ Important guidelines:
 });
 
 // 3. Interactive Dental Chat API
-app.post('/api/dental/chat', async (req, res) => {
+router.post('/dental/chat', async (req, res) => {
   try {
     const { messages, userRole } = req.body;
     const ai = getAi();
@@ -148,7 +150,7 @@ Always remind patients to consult their licensed dentist for official diagnosis.
 });
 
 // 4. SOAP Clinical Note Generator API (Clinician Tool)
-app.post('/api/dental/soap-generator', async (req, res) => {
+router.post('/dental/soap-generator', async (req, res) => {
   try {
     const { chiefComplaint, clinicalObservations, radiographsTaken, toothNumbers, vitalSigns, proposedProcedure } = req.body;
 
@@ -204,7 +206,7 @@ Return a JSON object strictly following the schema. Include appropriate ADA CDT 
 });
 
 // 5. Treatment Plan & Cost Estimator API
-app.post('/api/dental/treatment-plan', async (req, res) => {
+router.post('/dental/treatment-plan', async (req, res) => {
   try {
     const { diagnosisSummary, insuranceType } = req.body;
     const ai = getAi();
@@ -261,7 +263,7 @@ Return valid JSON matching the schema.`;
 });
 
 // 6. Dental Image / Intraoral Radiograph Analyzer API
-app.post('/api/dental/analyze-image', async (req, res) => {
+router.post('/dental/analyze-image', async (req, res) => {
   try {
     const { imageBase64, mimeType, userNotes } = req.body;
     if (!imageBase64) {
@@ -326,5 +328,11 @@ Return valid JSON according to schema.`,
     res.status(500).json({ error: err.message || 'Image analysis failed.' });
   }
 });
+
+// Mount the router on multiple paths to handle development proxying AND any Netlify rewrites cleanly
+app.use('/api', router);
+app.use('/.netlify/functions/api', router);
+app.use('/.netlify/functions/api/api', router);
+app.use('/', router);
 
 export default app;

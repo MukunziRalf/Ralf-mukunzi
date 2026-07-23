@@ -63,14 +63,19 @@ export const SymptomTriage: React.FC<SymptomTriageProps> = ({ initialToothNum, o
       });
 
       if (!res.ok) {
-        throw new Error('Failed to run AI triage assessment.');
+        let serverError = '';
+        try {
+          const errData = await res.json();
+          serverError = errData.error || errData.message || '';
+        } catch (_) {}
+        throw new Error(serverError || 'Failed to run AI triage assessment.');
       }
 
       const data: TriageResult = await res.json();
       setResult(data);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Something went wrong running AI symptom assessment.');
+      setError(`${err.message || 'Something went wrong running AI symptom assessment.'}. If you are on Netlify, make sure GEMINI_API_KEY is defined in your Netlify Environment Variables.`);
     } finally {
       setIsLoading(false);
     }

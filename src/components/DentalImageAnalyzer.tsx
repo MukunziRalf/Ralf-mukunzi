@@ -73,12 +73,19 @@ export const DentalImageAnalyzer: React.FC = () => {
         }),
       });
 
-      if (!res.ok) throw new Error('Failed to analyze image with AI.');
+      if (!res.ok) {
+        let serverError = '';
+        try {
+          const errData = await res.json();
+          serverError = errData.error || errData.message || '';
+        } catch (_) {}
+        throw new Error(serverError || 'Failed to analyze image with AI.');
+      }
       const data = await res.json();
       setAnalysis(data);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Error executing AI image analysis.');
+      setError(`${err.message || 'Error executing AI image analysis.'}. If you are on Netlify, make sure GEMINI_API_KEY is configured in your Environment Variables.`);
     } finally {
       setIsLoading(false);
     }
