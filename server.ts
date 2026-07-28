@@ -5,7 +5,7 @@ import apiApp from './src/api';
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Mount the API routes from our modular api module
   app.use(apiApp);
