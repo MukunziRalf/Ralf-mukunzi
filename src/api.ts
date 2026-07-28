@@ -70,9 +70,14 @@ function handleApiError(err: any, res: express.Response, ctx = '') {
   const retry = extractRetryDelay(err);
   const isQuota = err?.status === 'RESOURCE_EXHAUSTED' || (err?.error && err.error.code === 429) || err?.code === 429;
   if (isQuota || retry) {
-    const retryAfter = Math.ceil(retry || 30);
+    const retryAfter = Math.max(30, Math.ceil(retry || 30));
     res.setHeader('Retry-After', String(retryAfter));
-    return res.status(429).json({ error: err.message || 'Quota exceeded. Retry later.', retryAfter });
+    return res.status(429).json({
+      error: 'Gemini free-tier quota has been reached for this app. Please wait a few minutes and try again, or switch to a billing-enabled Gemini API key.',
+      retryAfter,
+      quotaExceeded: true,
+      suggestion: 'The current Gemini free-tier request limit is exhausted for this project/model.',
+    });
   }
   return res.status(500).json({ error: err.message || 'Internal server error' });
 }

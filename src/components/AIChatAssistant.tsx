@@ -79,10 +79,20 @@ export const AIChatAssistant: React.FC<AIChatAssistantProps> = ({ userRole, init
 
       if (!res.ok) {
         let serverError = '';
+        let retryAfter = 0;
+        let quotaExceeded = false;
         try {
           const errData = await res.json();
           serverError = errData.error || errData.message || '';
+          retryAfter = Number(errData.retryAfter) || 0;
+          quotaExceeded = Boolean(errData.quotaExceeded);
         } catch (_) {}
+
+        if (quotaExceeded) {
+          const waitText = retryAfter > 0 ? `Please wait about ${retryAfter} seconds and try again.` : 'Please wait a few minutes and try again.';
+          throw new Error(`${serverError || 'Gemini quota has been reached.'} ${waitText}`);
+        }
+
         throw new Error(serverError || 'Failed to get response from AI Dental Assistant.');
       }
 
