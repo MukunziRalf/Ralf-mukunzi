@@ -1,6 +1,6 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import LRU from 'lru-cache';
+import { LRUCache } from 'lru-cache';
 import { GoogleGenAI, Type } from '@google/genai';
 
 const app = express();
@@ -78,7 +78,7 @@ function handleApiError(err: any, res: express.Response, ctx = '') {
 }
 
 // Simple in-memory cache for identical prompts to reduce Gemini calls
-const cache = new LRU<string, any>({ max: 500, ttl: 1000 * 60 * 5 }); // 5 minutes
+const cache = new LRUCache<string, any>({ max: 500, ttl: 1000 * 60 * 5 }); // 5 minutes
 
 // 1. Health Check
 router.get('/health', (req, res) => {
