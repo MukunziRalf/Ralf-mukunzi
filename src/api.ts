@@ -1,5 +1,6 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
+import LRU from 'lru-cache';
 import { GoogleGenAI, Type } from '@google/genai';
 
 const app = express();
@@ -76,6 +77,9 @@ function handleApiError(err: any, res: express.Response, ctx = '') {
   return res.status(500).json({ error: err.message || 'Internal server error' });
 }
 
+// Simple in-memory cache for identical prompts to reduce Gemini calls
+const cache = new LRU<string, any>({ max: 500, ttl: 1000 * 60 * 5 }); // 5 minutes
+
 // 1. Health Check
 router.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'AI Dental Assistant API' });
@@ -102,6 +106,10 @@ Important guidelines:
 - If pain is 5-7 or involves acute hot/cold sensitivity that lingers, flag urgency as "PROMPT" (1-2 days).
 - Otherwise flag as "ROUTINE".
 - Keep medical advice professional, accurate, and include clear questions for the patient to ask their dentist.`;
+
+    const cacheKey = `symptom:${prompt}`;
+    const cached = cache.get(cacheKey);
+    if (cached) return res.json(cached);
 
     const response = await ai.models.generateContent({
       model: 'gemini-3.6-flash',
@@ -159,6 +167,7 @@ Important guidelines:
 
     const jsonText = response.text || '{}';
     const parsedData = JSON.parse(jsonText);
+    cache.set(cacheKey, parsedData);
     res.json(parsedData);
   } catch (err: any) {
     return handleApiError(err, res, '/api/dental/symptom-checker');
@@ -184,6 +193,10 @@ Always remind patients to consult their licensed dentist for official diagnosis.
       parts: [{ text: m.text }],
     }));
 
+    const cacheKey = `chat:${JSON.stringify(formattedContents)}:${userRole}`;
+    const cached = cache.get(cacheKey);
+    if (cached) return res.json({ text: cached });
+
     const response = await ai.models.generateContent({
       model: 'gemini-3.6-flash',
       contents: formattedContents,
@@ -192,7 +205,7 @@ Always remind patients to consult their licensed dentist for official diagnosis.
         temperature: 0.7,
       },
     });
-
+    cache.set(cacheKey, response.text);
     res.json({ text: response.text });
   } catch (err: any) {
     return handleApiError(err, res, '/api/dental/chat');
