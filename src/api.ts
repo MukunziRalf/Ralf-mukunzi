@@ -1,4 +1,5 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { GoogleGenAI, Type } from '@google/genai';
 
 const app = express();
@@ -23,6 +24,57 @@ const getAi = () => {
 };
 
 const router = express.Router();
+
+// Basic rate limiter to protect Gemini quota (per-IP)
+const aiLimiter = rateLimit({
+  windowMs: Number(process.env.AI_RATE_LIMIT_WINDOW_MS) || 60_000, // 1 minute default
+  max: Number(process.env.AI_RATE_LIMIT_MAX) || 10, // limit each IP to 10 requests per window
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Rate limit exceeded, try again later.' },
+});
+
+// Apply limiter to all /dental routes
+router.use('/dental', aiLimiter);
+
+// Helper: extract retry delay from Gemini error details
+function extractRetryDelay(err: any): number | null {
+  try {
+    if (err?.details && Array.isArray(err.details)) {
+      for (const d of err.details) {
+        if (d && typeof d === 'object' && String(d['@type'] || '').includes('RetryInfo')) {
+          const rd = d.retryDelay || d.retry_delay || d.retry || null;
+          if (!rd) continue;
+          const asString = String(rd);
+          const m = asString.match(/(\d+)(?:\.\d+)?s/);
+          if (m) return parseInt(m[1], 10);
+          if (rd.seconds) return Number(rd.seconds);
+        }
+      }
+    }
+    if (err?.retryDelay) {
+      const m = String(err.retryDelay).match(/(\d+)(?:\.\d+)?s/);
+      if (m) return parseInt(m[1], 10);
+      return Number(err.retryDelay) || null;
+    }
+  } catch (e) {
+    // ignore parsing errors
+  }
+  return null;
+}
+
+// Centralized API error handler that respects quota/retry info
+function handleApiError(err: any, res: express.Response, ctx = '') {
+  console.error(`Error in ${ctx}:`, err);
+  const retry = extractRetryDelay(err);
+  const isQuota = err?.status === 'RESOURCE_EXHAUSTED' || (err?.error && err.error.code === 429) || err?.code === 429;
+  if (isQuota || retry) {
+    const retryAfter = Math.ceil(retry || 30);
+    res.setHeader('Retry-After', String(retryAfter));
+    return res.status(429).json({ error: err.message || 'Quota exceeded. Retry later.', retryAfter });
+  }
+  return res.status(500).json({ error: err.message || 'Internal server error' });
+}
 
 // 1. Health Check
 router.get('/health', (req, res) => {
@@ -109,8 +161,7 @@ Important guidelines:
     const parsedData = JSON.parse(jsonText);
     res.json(parsedData);
   } catch (err: any) {
-    console.error('Error in /api/dental/symptom-checker:', err);
-    res.status(500).json({ error: err.message || 'Failed to generate symptom assessment.' });
+    return handleApiError(err, res, '/api/dental/symptom-checker');
   }
 });
 
@@ -144,8 +195,7 @@ Always remind patients to consult their licensed dentist for official diagnosis.
 
     res.json({ text: response.text });
   } catch (err: any) {
-    console.error('Error in /api/dental/chat:', err);
-    res.status(500).json({ error: err.message || 'Dental AI Chat error.' });
+    return handleApiError(err, res, '/api/dental/chat');
   }
 });
 
@@ -200,8 +250,7 @@ Return a JSON object strictly following the schema. Include appropriate ADA CDT 
     const jsonText = response.text || '{}';
     res.json(JSON.parse(jsonText));
   } catch (err: any) {
-    console.error('Error in /api/dental/soap-generator:', err);
-    res.status(500).json({ error: err.message || 'Failed to generate SOAP note.' });
+    return handleApiError(err, res, '/api/dental/soap-generator');
   }
 });
 
@@ -257,8 +306,7 @@ Return valid JSON matching the schema.`;
 
     res.json(JSON.parse(response.text || '{}'));
   } catch (err: any) {
-    console.error('Error in /api/dental/treatment-plan:', err);
-    res.status(500).json({ error: err.message || 'Failed to build treatment plan.' });
+    return handleApiError(err, res, '/api/dental/treatment-plan');
   }
 });
 
@@ -324,8 +372,7 @@ Return valid JSON according to schema.`,
 
     res.json(JSON.parse(response.text || '{}'));
   } catch (err: any) {
-    console.error('Error in /api/dental/analyze-image:', err);
-    res.status(500).json({ error: err.message || 'Image analysis failed.' });
+    return handleApiError(err, res, '/api/dental/analyze-image');
   }
 });
 
