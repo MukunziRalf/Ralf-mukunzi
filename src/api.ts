@@ -87,7 +87,7 @@ const cache = new LRUCache<string, any>({ max: 500, ttl: 1000 * 60 * 5 }); // 5 
 
 // 1. Health Check
 router.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'AI Dental Assistant API' });
+  res.json({ status: 'ok', service: 'DentalCare AI API' });
 });
 
 // 2. Symptom Checker & Triage API

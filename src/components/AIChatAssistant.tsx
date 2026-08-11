@@ -13,8 +13,8 @@ export const AIChatAssistant: React.FC<AIChatAssistantProps> = ({ userRole, init
       id: '1',
       sender: 'assistant',
       text: userRole === 'clinician'
-        ? "Hello Doctor! I'm your AI Dental Clinical Assistant. I can assist with ADA CDT coding, clinical protocol references, pharmacology, differential diagnosis notes, or patient education summaries. How can I assist your practice today?"
-        : "Hello! I am your AI Dental Assistant. You can ask me anything about tooth pain, procedure explanations, post-op care, brushing techniques, or pediatric oral care. How can I help your smile today?",
+        ? "Hello Doctor! I'm your DentalCare AI Assistant. I can assist with ADA CDT coding, clinical protocol references, pharmacology, differential diagnosis notes, or patient education summaries. How can I assist your practice today?"
+        : "Hello! I am DentalCare AI Assistant. You can ask me anything about tooth pain, procedure explanations, post-op care, brushing techniques, or pediatric oral care. How can I help your smile today?",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -93,7 +93,7 @@ export const AIChatAssistant: React.FC<AIChatAssistantProps> = ({ userRole, init
           throw new Error(`${serverError || 'Gemini quota has been reached.'} ${waitText}`);
         }
 
-        throw new Error(serverError || 'Failed to get response from AI Dental Assistant.');
+        throw new Error(serverError || 'Failed to get response from DentalCare AI Assistant.');
       }
 
       const data = await res.json();
@@ -140,7 +140,7 @@ export const AIChatAssistant: React.FC<AIChatAssistantProps> = ({ userRole, init
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h2 className="text-xl font-bold">AI Dental Assistant</h2>
+              <h2 className="text-xl font-bold">DentalCare AI Assistant</h2>
               <span className="text-xs bg-cyan-500/20 text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-500/30 font-semibold">
                 {userRole === 'clinician' ? 'Clinical Practice Mode' : 'Patient Companion'}
               </span>

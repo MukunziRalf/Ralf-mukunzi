@@ -68,14 +68,14 @@ export default function App() {
             <div className="space-y-1">
               <span className="font-bold text-amber-300 text-xs block">IMPORTANT MEDICAL & CLINICAL DISCLAIMER</span>
               <p className="text-[11px] text-slate-300 leading-relaxed">
-                AI Dental Assistant is an artificial intelligence triage and clinical assistance tool powered by Google Gemini AI. It is intended for educational, clinical documentation assistance, and triage informational purposes only. It does NOT provide formal medical diagnosis, definitive radiographic interpretation, or emergency prescription orders. If you are experiencing severe facial swelling, difficulty breathing or swallowing, trauma, or uncontrolled bleeding, please visit an emergency department or contact a licensed dentist immediately.
+                DentalCare AI Assistant is an artificial intelligence triage and clinical assistance tool powered by Google Gemini AI. It is intended for educational, clinical documentation assistance, and triage informational purposes only. It does NOT provide formal medical diagnosis, definitive radiographic interpretation, or emergency prescription orders. If you are experiencing severe facial swelling, difficulty breathing or swallowing, trauma, or uncontrolled bleeding, please visit an emergency department or contact a licensed dentist immediately.
               </p>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-800 text-[11px] text-slate-500">
             <div className="flex items-center space-x-2">
-              <span className="font-bold text-slate-300">AI Dental Assistant</span>
+              <span className="font-bold text-slate-300">DentalCare AI Assistant</span>
             </div>
 
             <p className="flex items-center space-x-1">

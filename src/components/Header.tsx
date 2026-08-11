@@ -20,7 +20,7 @@ export const Header: React.FC<HeaderProps> = ({ userRole, setUserRole, activeTab
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">AI Dental Assistant</span>
+                <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">DentalCare AI Assistant</span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Clinical & Patient Dental Intelligence</p>
             </div>

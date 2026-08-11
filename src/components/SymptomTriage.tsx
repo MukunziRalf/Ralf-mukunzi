@@ -288,7 +288,7 @@ export const SymptomTriage: React.FC<SymptomTriageProps> = ({ initialToothNum, o
             ) : (
               <>
                 <Sparkles className="w-5 h-5 text-cyan-200" />
-                <span>Analyze Symptoms with Gemini AI</span>
+                <span>Analyze Symptoms with DentalCare AI Assistant</span>
               </>
             )}
           </button>
@@ -415,7 +415,7 @@ export const SymptomTriage: React.FC<SymptomTriageProps> = ({ initialToothNum, o
                 }
                 className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all shadow-sm"
               >
-                <span>Ask AI Dental Assistant More Questions About This</span>
+                <span>Ask DentalCare AI Assistant More Questions About This</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

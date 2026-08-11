@@ -1,4 +1,4 @@
-# AI Dental Assistant (DentaCare AI)
+# DentalCare AI Assistant
 
 This repository contains a React + Express app with a small server to host API endpoints and a Vite-built frontend.
 
