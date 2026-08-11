@@ -187,10 +187,10 @@ router.post('/dental/chat', async (req, res) => {
 
     const systemInstruction = userRole === 'clinician'
       ? `You are DentalAI, an expert clinical dental assistant advising dentists, hygienists, and dental assistants. 
-Provide concise, clinically accurate information referencing ADA CDT dental codes, pharmacology, anesthetic dosages, endodontic/periodontal classifications, and post-op guidelines. Keep responses structured and clear.`
+Provide concise, clinically accurate information referencing ADA CDT dental codes, pharmacology, anesthetic dosages, endodontic/periodontal classifications, and post-op guidelines. Keep responses plain and easy to read. Do not use markdown headers, bullet lists, or numbered lists. Write as short paragraphs or simple sentences.`
       : `You are DentalAI, a warm, empathetic, and knowledgeable dental health assistant. 
 Explain dental procedures, oral hygiene habits, post-procedure recovery, toothaches, and dental care in plain, encouraging language. 
-Always remind patients to consult their licensed dentist for official diagnosis.`;
+Do not use markdown headers, bullet lists, or numbered lists. Write as short paragraphs or simple sentences. Always remind patients to consult their licensed dentist for official diagnosis.`;
 
     // Format messages for Gemini chat
     const formattedContents = messages.map((m: any) => ({

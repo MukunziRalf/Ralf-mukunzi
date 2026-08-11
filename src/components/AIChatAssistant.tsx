@@ -51,6 +51,17 @@ export const AIChatAssistant: React.FC<AIChatAssistantProps> = ({ userRole, init
 
   const quickPrompts = userRole === 'clinician' ? clinicianPrompts : patientPrompts;
 
+  const sanitizeAssistantText = (text: string) => {
+    if (!text) return '';
+
+    return text
+      .replace(/^\s*#{1,6}\s+/gm, '')
+      .replace(/^\s*[-*+]\s+/gm, '• ')
+      .replace(/^\s*\d+\.\s+/gm, '• ')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  };
+
   const handleSendMessage = async (promptText?: string) => {
     const textToSend = promptText || input;
     if (!textToSend.trim() || isLoading) return;
@@ -101,7 +112,7 @@ export const AIChatAssistant: React.FC<AIChatAssistantProps> = ({ userRole, init
       const assistantMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        text: data.text || 'I could not process that request.',
+        text: sanitizeAssistantText(data.text || 'I could not process that request.'),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
 
@@ -180,7 +191,7 @@ export const AIChatAssistant: React.FC<AIChatAssistantProps> = ({ userRole, init
                     : 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-tl-none border border-slate-200/80 dark:border-slate-700/80'
                 }`}
               >
-                <div className="whitespace-pre-wrap">{msg.text}</div>
+                <div className="whitespace-pre-wrap">{msg.sender === 'assistant' ? sanitizeAssistantText(msg.text) : msg.text}</div>
 
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-200/40 dark:border-slate-700/40 text-[10px] opacity-70">
                   <span>{msg.timestamp}</span>
