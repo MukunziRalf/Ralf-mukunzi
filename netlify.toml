@@ -8,7 +8,6 @@
 # Functions directory configuration
 [functions]
   directory = "netlify/functions"
-  node_compat = true
 
 [[redirects]]
   # This rule routes all client-side API requests starting with /api/
